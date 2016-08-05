@@ -42,22 +42,50 @@
                     android:defaultValue="false"
                     android:summary="@string/lockscreen_notification_summary"/>
             </PreferenceCategory>
-            <EditTextPreference
-                android:title="@string/pref_zone_1"
-                android:key="pref_zone1"
-                android:defaultValue="@string/Zone1"/>
-            <EditTextPreference
-                android:title="@string/pref_zone_2"
-                android:key="pref_zone2"
-                android:defaultValue="@string/Zone2"/>
-            <EditTextPreference
-                android:title="@string/pref_zone_3"
-                android:key="pref_zone3"
-                android:defaultValue="@string/Zone3"/>
-            <EditTextPreference
-                android:title="@string/pref_zone_4"
-                android:key="pref_zone4"
-                android:defaultValue="@string/Zone4"/>
+            <PreferenceCategory android:title="@string/Zone1">
+                <CheckBoxPreference
+                    android:defaultValue="true"
+                    android:summaryOff="Enable"
+                    android:summaryOn="Disable"
+                    android:key="zone1_enabled"/>
+                <EditTextPreference
+                    android:title="Name"
+                    android:key="pref_zone1"
+                    android:defaultValue="@string/Zone1"/>
+            </PreferenceCategory>
+            <PreferenceCategory android:title="@string/Zone2">
+                <CheckBoxPreference
+                    android:defaultValue="true"
+                    android:summaryOff="Enable"
+                    android:summaryOn="Disable"
+                    android:key="zone2_enabled" />
+                <EditTextPreference
+                    android:title="@string/pref_zone_2"
+                    android:key="pref_zone2"
+                    android:defaultValue="@string/Zone2"/>
+            </PreferenceCategory>
+            <PreferenceCategory android:title="@string/Zone3">
+                <CheckBoxPreference
+                    android:defaultValue="true"
+                    android:summaryOff="Enable"
+                    android:summaryOn="Disable"
+                    android:key="zone3_enabled" />
+                <EditTextPreference
+                    android:title="@string/pref_zone_3"
+                    android:key="pref_zone3"
+                    android:defaultValue="@string/Zone3"/>
+            </PreferenceCategory>
+            <PreferenceCategory android:title="@string/Zone4">
+                <CheckBoxPreference
+                    android:defaultValue="true"
+                    android:summaryOff="Enable"
+                    android:summaryOn="Disable"
+                    android:key="zone4_enabled"/>
+                <EditTextPreference
+                    android:title="@string/pref_zone_4"
+                    android:key="pref_zone4"
+                    android:defaultValue="@string/Zone4"/>
+            </PreferenceCategory>
         </PreferenceScreen>
         <PreferenceScreen android:title="White Zones">
             <PreferenceCategory android:title="@string/cat_white_zones_head" >

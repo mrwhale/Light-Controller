@@ -82,6 +82,10 @@ public class controlPreferences extends ActionBarActivity {
             EditTextPreference controllerIP = (EditTextPreference) findPreference("pref_light_controller_ip");
 
             CheckBoxPreference rgbEnable = (CheckBoxPreference) findPreference("rgbw_enabled");
+            final CheckBoxPreference zone1Enable = (CheckBoxPreference) findPreference("zone1_enabled");
+            final CheckBoxPreference zone2Enable = (CheckBoxPreference) findPreference("zone2_enabled");
+            final CheckBoxPreference zone3Enable = (CheckBoxPreference) findPreference("zone3_enabled");
+            final CheckBoxPreference zone4Enable = (CheckBoxPreference) findPreference("zone4_enabled");
             final EditTextPreference zone1 = (EditTextPreference) findPreference("pref_zone1");
             final EditTextPreference zone2 = (EditTextPreference) findPreference("pref_zone2");
             final EditTextPreference zone3 = (EditTextPreference) findPreference("pref_zone3");
@@ -93,20 +97,30 @@ public class controlPreferences extends ActionBarActivity {
             final EditTextPreference zone7 = (EditTextPreference) findPreference("pref_zone7");
             final EditTextPreference zone8 = (EditTextPreference) findPreference("pref_zone8");
 
+            CheckBoxPreference pebbleEnabled = (CheckBoxPreference) findPreference("pref_pebble");
+
             if(!rgbEnable.isChecked()) {
+                zone1Enable.setEnabled(false);
                 zone1.setEnabled(false);
                 zone2.setEnabled(false);
+                zone2Enable.setEnabled(false);
                 zone3.setEnabled(false);
+                zone3Enable.setEnabled(false);
                 zone4.setEnabled(false);
+                zone4Enable.setEnabled(false);
             }
 
             rgbEnable.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                         zone1.setEnabled((Boolean) newValue);
+                        zone1Enable.setEnabled((Boolean) newValue);
                         zone2.setEnabled((Boolean) newValue);
+                        zone2Enable.setEnabled((Boolean) newValue);
                         zone3.setEnabled((Boolean) newValue);
+                        zone3Enable.setEnabled((Boolean) newValue);
                         zone4.setEnabled((Boolean) newValue);
+                        zone4Enable.setEnabled((Boolean) newValue);
                     return true;
                 }
             });

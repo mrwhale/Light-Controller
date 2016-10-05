@@ -60,4 +60,5 @@ dependencies {
     }
     compile project(':circularseekbar')
     compile 'com.heinrichreimersoftware.materialdrawer:library:1.4.1'
+    compile 'com.google.android.gms:play-services-base:6.5.87'
 }

@@ -17,6 +17,7 @@ import static com.getpebble.android.kit.Constants.MSG_DATA;
 import static com.getpebble.android.kit.Constants.TRANSACTION_ID;
 import tv.piratemedia.lightcontroler.controlCommands;
 import tv.piratemedia.lightcontroler.controller;
+import tv.piratemedia.lightcontroler.utils;
 
 import java.util.UUID;
 /*
@@ -35,14 +36,31 @@ public class pebbleReceiver extends BroadcastReceiver {
     // Variables to hold the key values in the tuple sent from pebble. Matches pebble app values
     private static final int KEY_CMD = 3;
     private static final int KEY_ZONE = 2;
+    private static final int appKeyWifiStatus = 4;
     //Create a new controller to handle the sending of commands to the bridge
     controller mCont = new controller();
     controlCommands contCmd;
+    private utils Utils;
+    PebbleDictionary wifiStatus = new PebbleDictionary();
     //private static SharedPreferences prefs;
 
     //Tag for logging
     //TODO is there a way to only have it send to log if its flagged as debug or something? if(DEBUG){ Log.D()} something like this
     static String TAG = "Pebble Receiver";
+
+    /*
+    Function so pebble app can request wifi status
+     */
+    public boolean getAndSendWifiStatus(Context context){
+        Utils = new utils(context);
+        if(!Utils.isWifiConnection()){
+            //send a message to the pebble to say we arent on wifi
+            wifiStatus.addString(appKeyWifiStatus, "0");
+            PebbleKit.sendDataToPebble(context, WatchUUID, wifiStatus);
+            //break or similar to exit the onRecieve function
+        }
+        return true;
+    }
 
     @Override
     //On receive. Does the deed when we hear from the pebble
@@ -50,23 +68,24 @@ public class pebbleReceiver extends BroadcastReceiver {
         /*if(!prefs.getBoolean("pref_pebble", false)) {
             Log.d(TAG,"pebble prefs is false");
         } */
-
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
         boolean test = prefs.getBoolean("pref_pebble", false);
-        //Log.d(TAG,"Pebble prefs is " + test);
-        /* Future special. Code to see if we are on the right wifi, if not then dont bother to send command?
-        utils utils = new utils(context);
-        final SharedPreferences prefs = context.getSharedPreferences(WearSettings.NETWORKS_PREFS, Context.MODE_PRIVATE);
-
- 
-        if(utils.getWifiName() != null && prefs.getBoolean(utils.getWifiName(), false)) {
-            Log.d(TAG,"Not on home wifi");
-        }*/
 
         //Code necessary to have this Receiver service accept input from the pebble even if main app is not running
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         //Log.d(TAG, "on recieve");
+        //Log.d(TAG,"Pebble prefs is " + test);
+        //If we are not connected to the wifi, better tell the pebble about it
+        Utils = new utils(context);
+        if(!Utils.isWifiConnection()){
+            //send a message to the pebble to say we arent on wifi
+            wifiStatus.addString(appKeyWifiStatus, "0");
+            PebbleKit.sendDataToPebble(context, WatchUUID, wifiStatus);
+            //break or similar to exit the onRecieve function
+        }
+
+
         //Check to see if the intent is from the pebble
         if (intent.getAction().equals(INTENT_APP_RECEIVE)) {
             final int transactionId = intent.getIntExtra(TRANSACTION_ID, -1);
@@ -78,7 +97,7 @@ public class pebbleReceiver extends BroadcastReceiver {
             //Log.d(TAG, "APP UUID -" + receivedUuid + "- this");
             //Check to see if the receieverUUID matches the one we want, If not, then ignore
             if (!WatchUUID.equals(receivedUuid)) {
-                Log.d(TAG , "Not my uuid, plz ignore");
+                Log.d(TAG , "Not my apps uuid, plz ignore");
                 return;
             }
 
@@ -89,6 +108,8 @@ public class pebbleReceiver extends BroadcastReceiver {
                 return;
             }
             try {
+                //todo implement getAndSendWifiStatus around here. need to change the 2 values i receive and include a special value for other things, like in the case
+                // i want to do something other then send a command. Check the zone value and if its not within 0-9 then its not a light command
                 contCmd = new controlCommands(context, mCont.mHandler);
                 //extract data from pebble message
                 final PebbleDictionary data = PebbleDictionary.fromJson(jsonData);

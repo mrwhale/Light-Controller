@@ -229,6 +229,7 @@ public class controlCommands {
             Thread.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Log.d("controlcommands", e.toString());
         }
         LightsOff(9);
     }
